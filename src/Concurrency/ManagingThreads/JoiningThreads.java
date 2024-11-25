@@ -1,4 +1,4 @@
-package ManagingThreads;
+package Concurrency.ManagingThreads;
 
 public class JoiningThreads {
     public static void main(String[] args) {

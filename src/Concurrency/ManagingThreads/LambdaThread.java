@@ -1,10 +1,10 @@
-package ManagingThreads;
+package Concurrency.ManagingThreads;
 
 public class LambdaThread {
     public static void main(String[] args) {
         String id = "1";
 
-        //Code stored in a Runnable
+        //Code stored in the abstract method of Runnable r
         Runnable r = () -> {
             double result = 0;
             for (int i = 1; i < 100000; i++) {
@@ -15,7 +15,7 @@ public class LambdaThread {
             System.out.println("Worker "+id+": result="+result);
         };
 
-        //Passing r code into Thread. The code is in run() now.
+        //Passing r code into Thread. The code is in the run() of t1 now.
         Thread t1 = new Thread(r);
 
         //Start and join of t1:

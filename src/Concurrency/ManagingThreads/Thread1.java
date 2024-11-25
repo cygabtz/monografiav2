@@ -1,4 +1,4 @@
-package ManagingThreads;
+package Concurrency.ManagingThreads;
 
 public class Thread1 extends Thread{
     private double result;

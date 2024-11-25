@@ -1,8 +1,8 @@
-package ManagingThreads;
+package Concurrency.ManagingThreads;
 
-public class CodeB implements java.lang.Runnable {
-    @Override
-    public void run() {
+public class CodeA extends Thread{
+    public void run(){
+        //Code that will be broken
         for(int i = 0; i<=5; i++){
             System.out.println(i);
             try {

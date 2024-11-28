@@ -5,8 +5,8 @@ public class MergeSortRecursivoSerial {
     public static void MSRS(int[] arr, int left, int right){
         if(left < right){
             //Encontrar el punto medio del array
-            int mid = (left+right) / 2;
-            //int mid = left + (right) / 2;
+            //Cálculo seguro con l+(r-l)/2 para evitar desbordamiento
+            int mid = left + (right - left) / 2;
 
             //Ordenar cada mitad
             MSRS(arr, left, mid);
@@ -23,13 +23,12 @@ public class MergeSortRecursivoSerial {
         int R[] = new int[right - mid];
 
         //Copiar datos a los arrays
-        for (int i = 0; i < L.length; ++i){
+        for (int i = 0; i < L.length; i++){
             L[i] = arr[left + i];
         }
-        for (int j = 0; j < R.length; ++j){
+        for (int j = 0; j < R.length; j++){
             R[j] = arr[mid + 1 + j];
         }
-        //++j??
 
         //Índices de los subarrays L y R
         int i = 0, j = 0;
@@ -74,14 +73,15 @@ public class MergeSortRecursivoSerial {
     }
 
     public static void main(String [] args){
-        int arr[] = { 12, 11, 13, 5, 6, 7 };
+        int array[] = { 12, 11, 13, 5, 6, 7 };
+        
+        System.out.println("Array desordenado");
+        printArray(array);
 
-        System.out.println("Given array is");
-        printArray(arr);
+        //Paso por referencia
+        MSRS(array, 0, array.length - 1);
 
-        MSRS(arr, 0, arr.length - 1);
-
-        System.out.println("\nSorted array is");
-        printArray(arr);
+        System.out.println("\nArray ordenado");
+        printArray(array);
     }
 }

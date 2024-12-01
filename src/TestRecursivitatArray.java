@@ -1,5 +1,3 @@
-package Algoritmos;
-
 public class TestRecursivitatArray {
 
     public static void main(String[] args) {

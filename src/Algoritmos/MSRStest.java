@@ -10,7 +10,7 @@ public class MSRStest {
 
     public static void main(String[] args) throws IOException{
         //Generar el array de longitudes. Un total de 9.
-        int[] sizes = new int[9];
+        int[] sizes = new int[8];
         for (int i = 0; i<sizes.length; i++){
             sizes[i] = (int) Math.pow(10, i+1);
         }
@@ -25,7 +25,13 @@ public class MSRStest {
                 int [] array = generateArray(sizes[i]);
 
                 long startTime = System.nanoTime();
-                MSRS(array, 0, array.length-1);
+
+                try{
+                    MSRS(array, 0, array.length-1);
+                } catch (OutOfMemoryError e){
+                    e.printStackTrace();
+                }
+
                 long endTime = System.nanoTime();
 
                 results [i][j] = endTime - startTime;

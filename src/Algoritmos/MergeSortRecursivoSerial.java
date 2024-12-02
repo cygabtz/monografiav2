@@ -13,7 +13,12 @@ public class MergeSortRecursivoSerial {
             MSRS(arr, mid+1, right);
 
             //Unir las mitades
-            merge(arr, left, mid, right);
+            try{
+                merge(arr, left, mid, right);
+            } catch (OutOfMemoryError e){
+                System.err.println("Error "+e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 

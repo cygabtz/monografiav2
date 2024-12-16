@@ -1,7 +1,7 @@
-package Algoritmos;
+package Algoritmos.Tests;
 
 import static Algoritmos.MergeSortRecursivoSerial.*;
-import static Algoritmos.MSRStest.*;
+import static Algoritmos.Tests.MSRStest.*;
 
 public class TestArrayGenerator {
     public static void main(String[] args) {

@@ -2,23 +2,18 @@ package Algoritmos;
 
 public class MergeSortRecursivoSerial {
     //https://www.geeksforgeeks.org/merge-sort/
-    public static void MSRS(int[] arr, int left, int right){
+    public static void sort(int[] arr, int left, int right){
         if(left < right){
             //Encontrar el punto medio del array
             //Cálculo seguro con l+(r-l)/2 para evitar desbordamiento
             int mid = left + (right - left) / 2;
 
             //Ordenar cada mitad
-            MSRS(arr, left, mid);
-            MSRS(arr, mid+1, right);
+            sort(arr, left, mid);
+            sort(arr, mid+1, right);
 
             //Unir las mitades
-            try{
-                merge(arr, left, mid, right);
-            } catch (OutOfMemoryError e){
-                System.err.println("Error "+e.getMessage());
-                e.printStackTrace();
-            }
+            merge(arr, left, mid, right);
         }
     }
 
@@ -84,7 +79,7 @@ public class MergeSortRecursivoSerial {
         printArray(array);
 
         //Paso por referencia
-        MSRS(array, 0, array.length - 1);
+        sort(array, 0, array.length - 1);
 
         System.out.println("\nArray ordenado");
         printArray(array);

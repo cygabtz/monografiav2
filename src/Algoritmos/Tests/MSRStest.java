@@ -1,4 +1,4 @@
-package Algoritmos;
+package Algoritmos.Tests;
 
 import java.util.SplittableRandom;
 import java.io.FileWriter;
@@ -8,7 +8,7 @@ import static Algoritmos.MergeSortRecursivoSerial.*;
 
 public class MSRStest {
 
-    public static void main(String[] args) throws IOException{
+    public static void test( ) throws IOException{
         //Generar el array de longitudes. Un total de 9.
         int[] sizes = new int[8];
         for (int i = 0; i<sizes.length; i++){
@@ -26,12 +26,7 @@ public class MSRStest {
 
                 long startTime = System.nanoTime();
 
-                try{
-                    MSRS(array, 0, array.length-1);
-                } catch (OutOfMemoryError e){
-                    e.printStackTrace();
-                }
-
+                    sort(array, 0, array.length-1);
                 long endTime = System.nanoTime();
 
                 results [i][j] = endTime - startTime;
@@ -49,9 +44,11 @@ public class MSRStest {
             averages[i] /= reps;
         }
 
-        System.out.println("AVERAGES SUCCESSFULL");
+        System.out.println("AVERAGES SUCCESSFUL");
 
         writeResultsToCSV(sizes, averages);
+
+        System.out.println("RESULTS WROTE TO CSV");
     }
 
     public static int[] generateArray(int size){

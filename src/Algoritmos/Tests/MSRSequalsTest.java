@@ -1,6 +1,6 @@
 package Algoritmos.Tests;
 
-import Algoritmos.MergeSortRecursivoSerial_V2;
+import Algoritmos.MergeSortRecursivoSerial_V1;
 
 public class MSRSequalsTest {
     public static void main(String[] args) {
@@ -8,7 +8,7 @@ public class MSRSequalsTest {
         System.out.println("Actual array: ");
         printArray(actual);
 
-        MergeSortRecursivoSerial_V2.sort(actual, actual.length);
+        MergeSortRecursivoSerial_V1.sort(actual, actual.length);
 
         System.out.println("Sorted array: ");
         printArray(actual);

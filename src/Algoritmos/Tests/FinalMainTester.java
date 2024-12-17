@@ -1,52 +1,69 @@
 package Algoritmos.Tests;
 
-import Algoritmos.MergeSortIterativoParalelo;
-import Algoritmos.MergeSortIterativoSerial;
-import Algoritmos.MergeSortRecursivoParalelo_V2;
-import Algoritmos.MergeSortRecursivoSerial_V2;
+import Algoritmos.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.SplittableRandom;
 import java.util.concurrent.ForkJoinPool;
 
-public class TestMergeSort {
+public class FinalMainTester {
 
     private static final int[] ARRAY_SIZES = generateSizes(100, 1_000_000, 20);
     private static final int NUM_EXECUTIONS = 10;
     private static final SplittableRandom RANDOM = new SplittableRandom();
-    private static final String OUTPUT_FILE = "merge_sort_results.csv";
+    private static final String OUTPUT_FILE = "resultados_completos.csv";
+
+    private static FileWriter promedios;
 
     public static void main(String[] args) throws IOException {
         // Configurar el ForkJoinPool para implementaciones paralelas
         int numCores = Runtime.getRuntime().availableProcessors();
         ForkJoinPool customPool = new ForkJoinPool(numCores);
+        System.out.println("Thread Pools configurada con "+numCores+ " cores.");
 
         // Crear archivo de salida
         try (FileWriter writer = new FileWriter(OUTPUT_FILE)) {
-            writer.write("Algorithm,Array Size,Execution Times,Average Time\n");
+            //Archivo general
+            writer.write("Algoritmos;Tamaños;Tiempos;Promedios\n");
+            System.out.println("CSV creado.");
+            //Archivo de solo los promedios
+            promedios = new FileWriter("Promedios.csv");
+            promedios.write("Tamaños;MSRS;MSIS;MSRP;MSIP;MSIP_Optimizado\n");
 
-            // Probar cada algoritmo
-            for (int size : ARRAY_SIZES) {
+            // Testear cada algoritmo
+            for (int i = 0; i<ARRAY_SIZES.length; i++) {
+                int size = ARRAY_SIZES[i];
+                System.out.println("Iteración  " + i + " con tamaño " + size);
                 int[] originalArray = generateArray(size);
+                promedios.write(size + ";");
+                System.out.println("Array generado con tamaño " + size);
+
 
                 testAlgorithm("MSRS", originalArray, writer, size,
-                        array -> MergeSortRecursivoSerial_V2.sort(array, array.length));
+                        array -> MergeSortRecursivoSerial_V1.sort(array, array.length));
                 testAlgorithm("MSIS", originalArray, writer, size, MergeSortIterativoSerial::sort);
 
                 testAlgorithm("MSRP", originalArray, writer, size, (arr) -> {
-                    MergeSortRecursivoParalelo_V2 task = new MergeSortRecursivoParalelo_V2(arr, arr.length);
+                    MergeSortRecursivoParalelo_V1 task = new MergeSortRecursivoParalelo_V1(arr, arr.length);
                     customPool.invoke(task);
                 });
 
-                testAlgorithm("MSIP", originalArray, writer, size, MergeSortIterativoParalelo::sort);
+//                testAlgorithm("MSIP", originalArray, writer, size, MergeSortIterativoParalelo::sort);
+                testAlgorithm("MSIP_Optimizado", originalArray, writer, size,
+                        MergeSortIterativoParalelo_V1::sort);
+                promedios.write("\n");
             }
         }
 
-        System.out.println("Test completado. Resultados guardados en " + OUTPUT_FILE);
+        System.out.println("TEST FINALIZADO. Resultados completos en " + OUTPUT_FILE);
     }
 
-    private static void testAlgorithm(String algorithm, int[] originalArray, FileWriter writer, int size, SortAlgorithm sortAlgorithm) throws IOException {
+    private static void testAlgorithm(String algorithm,
+                                      int[] originalArray,
+                                      FileWriter writer,
+                                      int size,
+                                      SortAlgorithm sortAlgorithm) throws IOException {
         long[] executionTimes = new long[NUM_EXECUTIONS];
 
         // Medir tiempos de ejecución
@@ -64,9 +81,11 @@ public class TestMergeSort {
 
         // Calcular promedio sin mejor y peor tiempos
         long averageTime = calculateAverage(executionTimes);
-
+        System.out.println("Promedio del " + algorithm + ": " + averageTime);
         // Escribir resultados
-        writer.write(algorithm + "," + size + "," + arrayToString(executionTimes) + "," + averageTime + "\n");
+        writer.write(algorithm + ";" + size + ";" + arrayToString(executionTimes) + ";" + averageTime + "\n");
+        promedios.write(Long.toString(averageTime) + ";");
+        System.out.println("Resultados del " + algorithm + " escritos en " + OUTPUT_FILE);
     }
 
     private static int[] generateArray(int size) {
@@ -89,12 +108,11 @@ public class TestMergeSort {
         long max = Long.MIN_VALUE;
         long sum = 0;
 
-        for (long time : times) {
-            sum += time;
-            if (time < min) min = time;
-            if (time > max) max = time;
+        for (int i = 0; i<times.length; i++) {
+            sum += times[i];
+            if (times[i] < min) min = times[i];
+            if (times[i] > max) max = times[i];
         }
-
         return (sum - min - max) / (times.length - 2);
     }
 

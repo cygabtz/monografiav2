@@ -1,6 +1,6 @@
 package Algoritmos;
 
-public class MergeSortRecursivoSerial_V2 {
+public class MergeSortRecursivoSerial_V1 {
     //Retrieved from: https://www.baeldung.com/java-merge-sort
     public static void sort(int[] A, int length) {
         //Caso base

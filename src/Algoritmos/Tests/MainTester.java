@@ -1,8 +1,8 @@
 package Algoritmos.Tests;
 
-import Algoritmos.MergeSortParaleloRecursivo;
-import Algoritmos.MergeSortRecursivoParalelo_V2;
-import Algoritmos.MergeSortRecursivoSerial_V2;
+import Algoritmos.MergeSortRecursivoParalelo_V0;
+import Algoritmos.MergeSortRecursivoParalelo_V1;
+import Algoritmos.MergeSortRecursivoSerial_V1;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -84,17 +84,17 @@ public class MainTester {
     public static void main(String[] args) throws IOException {
 //        test((array -> MergeSortRecursivoSerial.sort(array, 0, array.length-1)),
 //                7, "MSRSv1");
-        test(array -> MergeSortRecursivoSerial_V2.sort(array, array.length), 7, "MSRSv2");
+        test(array -> MergeSortRecursivoSerial_V1.sort(array, array.length), 7, "MSRSv2");
 
         test(array -> {
             final ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors() -1);
-            MergeSortParaleloRecursivo task = new MergeSortParaleloRecursivo(array, array.length);
+            MergeSortRecursivoParalelo_V0 task = new MergeSortRecursivoParalelo_V0(array, array.length);
             forkJoinPool.invoke(task);
         }, 7, "MSPRv1");
 
         test(array -> {
             final ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors() -1);
-            MergeSortRecursivoParalelo_V2 task = new MergeSortRecursivoParalelo_V2(array, array.length);
+            MergeSortRecursivoParalelo_V1 task = new MergeSortRecursivoParalelo_V1(array, array.length);
             forkJoinPool.invoke(task);
         }, 7, "MSPRv2");
     }

@@ -2,20 +2,20 @@ package Algoritmos;
 
 import java.util.concurrent.RecursiveAction;
 
-public class MergeSortRecursivoParalelo_V2 extends RecursiveAction {
+public class MergeSortRecursivoParalelo_V1 extends RecursiveAction {
 
     private final int[] A;
     private final int length;
-    private final int max = 8192; //threshold
+    private final int threshold = 8192; //threshold
 
-    public MergeSortRecursivoParalelo_V2(int[] A, int length){
+    public MergeSortRecursivoParalelo_V1(int[] A, int length){
         this.A = A;
         this.length = length;
     }
     @Override
     protected void compute() {
-        if (length <= max) {
-            MergeSortRecursivoSerial_V2.sort(A, length); System.out.println("MSRS run");
+        if (length <= threshold) {
+            MergeSortRecursivoSerial_V1.sort(A, length); System.out.println("MSRS run");
         } else {
             final int mid = length / 2;
             int[] L = new int[mid];
@@ -24,8 +24,8 @@ public class MergeSortRecursivoParalelo_V2 extends RecursiveAction {
             for (int i = 0; i < mid; i++)   L[i] = A[i];
             for (int i = mid; i < length; i++)  R[i - mid] = A[i];
 
-            final MergeSortRecursivoParalelo_V2 Left = new MergeSortRecursivoParalelo_V2(L, mid);
-            final MergeSortRecursivoParalelo_V2 Right = new MergeSortRecursivoParalelo_V2(R, length - mid);
+            final MergeSortRecursivoParalelo_V1 Left = new MergeSortRecursivoParalelo_V1(L, mid);
+            final MergeSortRecursivoParalelo_V1 Right = new MergeSortRecursivoParalelo_V1(R, length - mid);
 
             invokeAll(Left, Right);
 

@@ -1,6 +1,6 @@
 package Algoritmos.Tests;
 
-import static Algoritmos.MergeSortRecursivoSerial.*;
+import static Algoritmos.MergeSortRecursivoSerial_V0.*;
 import static Algoritmos.Tests.MSRStest.*;
 
 public class TestArrayGenerator {

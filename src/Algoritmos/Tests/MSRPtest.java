@@ -1,6 +1,6 @@
 package Algoritmos.Tests;
 
-import Algoritmos.MergeSortParaleloRecursivo;
+import Algoritmos.MergeSortRecursivoParalelo_V0;
 
 import java.util.concurrent.ForkJoinPool;
 
@@ -14,7 +14,7 @@ public class MSRPtest {
 
         final ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors() -1);
 
-        MergeSortParaleloRecursivo task = new MergeSortParaleloRecursivo(arr, arr.length);
+        MergeSortRecursivoParalelo_V0 task = new MergeSortRecursivoParalelo_V0(arr, arr.length);
 
         forkJoinPool.invoke(task);
 

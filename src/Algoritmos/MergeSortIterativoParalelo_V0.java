@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class MergeSortIterativoParalelo {
+public class MergeSortIterativoParalelo_V0 {
 
     public static void sort(int[] array) {
         int n = array.length;

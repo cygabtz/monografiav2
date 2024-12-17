@@ -1,6 +1,6 @@
 package Algoritmos;
 
-public class MergeSortRecursivoSerial {
+public class MergeSortRecursivoSerial_V0 {
     //https://www.geeksforgeeks.org/merge-sort/
     public static void sort(int[] arr, int left, int right){
         if(left < right){

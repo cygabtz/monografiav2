@@ -2,11 +2,11 @@ package Algoritmos;
 
 import java.util.concurrent.RecursiveAction;
 
-public class MergeSortParaleloRecursivo extends RecursiveAction {
+public class MergeSortRecursivoParalelo_V0 extends RecursiveAction {
 
     private final int[] A;
     private final int length;
-    public MergeSortParaleloRecursivo(int[] A, int length){
+    public MergeSortRecursivoParalelo_V0(int[] A, int length){
         this.A = A;
         this.length = length;
     }
@@ -21,8 +21,8 @@ public class MergeSortParaleloRecursivo extends RecursiveAction {
         for (int i = 0; i < mid; i++)   L[i] = A[i];
         for (int i = mid; i < length; i++)  R[i - mid] = A[i];
 
-        final MergeSortParaleloRecursivo Left = new MergeSortParaleloRecursivo(L, mid);
-        final MergeSortParaleloRecursivo Right = new MergeSortParaleloRecursivo(R, length - mid);
+        final MergeSortRecursivoParalelo_V0 Left = new MergeSortRecursivoParalelo_V0(L, mid);
+        final MergeSortRecursivoParalelo_V0 Right = new MergeSortRecursivoParalelo_V0(R, length - mid);
 
         invokeAll(Left, Right);
 

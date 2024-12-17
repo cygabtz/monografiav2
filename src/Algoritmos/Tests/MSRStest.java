@@ -4,7 +4,7 @@ import java.util.SplittableRandom;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static Algoritmos.MergeSortRecursivoSerial.*;
+import static Algoritmos.MergeSortRecursivoSerial_V0.*;
 
 public class MSRStest {
 

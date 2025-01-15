@@ -30,6 +30,7 @@ public class FinalMainTester {
             //Archivo de solo los promedios
             promedios = new FileWriter("Promedios.csv");
             promedios.write("Tamaños;MSRS;MSIS;MSRP;MSIP;MSIP_Optimizado\n");
+            //BufferedWritter mejor
 
             // Testear cada algoritmo
             for (int i = 0; i<ARRAY_SIZES.length; i++) {

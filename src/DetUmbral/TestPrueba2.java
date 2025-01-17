@@ -1,25 +1,22 @@
 package DetUmbral;
 
 import AlgoritmoFinal.MSrecursivoParalelo;
-import org.openjdk.jmh.annotations.*;
+import AlgoritmoFinal.MSrecursivoSerial;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.SplittableRandom;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
 
-
-public class ThreshBenchmark {
+public class TestPrueba2 {
     private static long[][] results;
-    private int[] array;
+    private static final int MAX_SIZE = 1_000_000;
 
-    @Setup(Level.Trial)
-    public void setUp() throws IOException {
-        array = generateArray(1000);
-        results = new long[30][9];
-        for (int size=10, i=0; size<=1_000_000_000; size*=10, i++){
+    public static void main(String[] args) throws IOException {
+        results = new long[9][30];
+        for (int size=10, i=0; size<=MAX_SIZE; size*=10, i++){
             int[] array = generateArray(size);
+            int[] aux = new int[array.length];
             long[] times = new long[10];
             long totalTime = 0;
 
@@ -30,15 +27,11 @@ public class ThreshBenchmark {
                 } else {
                     for (int trial = 0; trial<10; trial++){
 
-                        //Inicialización de la piscina
-                        final ForkJoinPool forkJoinPool =
-                                new ForkJoinPool(Runtime.getRuntime().availableProcessors() -1);
-                        MSrecursivoParalelo task =
-                                new MSrecursivoParalelo(array, new int[array.length], 0, array.length-1);
-
+                        //Llamada al Garbage Collector
+                        System.gc();
                         //Benchmark
                         long start = System.nanoTime();
-                        testMethod(forkJoinPool, task);
+                        MSrecursivoSerial.sort(array, aux, 0, array.length-1);
                         long end = System.nanoTime();
 
                         long avg = end-start;
@@ -57,21 +50,11 @@ public class ThreshBenchmark {
             }
         }
         writeResults();
-
     }
-
-    @Benchmark
-    @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.NANOSECONDS)
-    @Measurement(iterations = 10, time = 1, timeUnit = TimeUnit.NANOSECONDS)
-    @Fork(1)
-    public void testMethod(ForkJoinPool forkJoinPool, MSrecursivoParalelo task) throws IOException {
-        forkJoinPool.invoke(task);
-    }
-
-    public static void writeResults() throws IOException {
-        try (FileWriter writer = new FileWriter("results.csv")) {
+    public static void writeResults() throws IOException{
+        try (FileWriter writer = new FileWriter("resultsSerial.csv")) {
             // Escribir encabezados writer.append("Threshold\\Size");
-            for (int size = 10; size <= 1_000_000_000; size *= 10) {
+            for (int size = 10; size <= MAX_SIZE; size *= 10) {
                 writer.append(",").append(String.valueOf(size));
             }
             writer.append("\n");
@@ -86,16 +69,15 @@ public class ThreshBenchmark {
         }
     }
 
-    public int[] generateArray(int size) {
-        int[] array = new int[size];
+    public static int[] generateArray(int size){
+        int [] array = new int[size];
         long seed = 6180339887L;
         SplittableRandom random = new SplittableRandom(seed);
 
-        // Todos los arrays constan de una misma secuencia
-        for (int i = 0; i < array.length; i++) {
-            array[i] = random.nextInt(1000); // De 0 a 999
+        //Todos los arrays constan de una misma secuencia
+        for (int i = 0; i<array.length; i++){
+            array[i] = random.nextInt(1000); //De 0 a 999
         }
         return array;
     }
 }
-

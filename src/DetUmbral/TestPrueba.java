@@ -19,7 +19,7 @@ public class TestPrueba{
             long[] times = new long[10];
             long totalTime = 0;
 
-            for (int threshold = 2, j=0; threshold<=Math.pow(2, 29); threshold*=2, j++){
+            for (int threshold = 1, j=0; threshold<=Math.pow(2, 29); threshold*=2, j++){
                 if (size < threshold){
                     results[i][j] = -1;
                     break;
@@ -27,9 +27,10 @@ public class TestPrueba{
                     for (int trial = 0; trial<10; trial++){
                         //Inicialización piscina y tarea
                         final ForkJoinPool forkJoinPool =
-                                new ForkJoinPool(Runtime.getRuntime().availableProcessors() -1);
+                                new ForkJoinPool(3);
                         final MSrecursivoParalelo task =
                                 new MSrecursivoParalelo(array, new int[array.length], 0, array.length-1);
+                        MSrecursivoParalelo.THRESHOLD = threshold;
 
                         //Llamada al Garbage Collector
                         System.gc();
@@ -50,13 +51,15 @@ public class TestPrueba{
 
                     //Calcular el promedio
                     results[i][j] = (totalTime - min - max) / 8;
+                    System.out.println("Size: " + size + "\t\t\t\tThresh: "+threshold +
+                            "\t\t\t\tTime: "+ results[i][j]);
                 }
             }
         }
         writeResults();
     }
     public static void writeResults() throws IOException{
-        try (FileWriter writer = new FileWriter("results.csv")) {
+        try (FileWriter writer = new FileWriter("threshMSrecuParal.csv")) {
             // Escribir encabezados writer.append("Threshold\\Size");
             for (int size = 10; size <= MAX_SIZE; size *= 10) {
                 writer.append(",").append(String.valueOf(size));

@@ -1,5 +1,7 @@
 package AlgoritmoFinal;
 import Algoritmos.MergeSortRecursivoParalelo_V0;
+import Algoritmos.MergeSortRecursivoParalelo_V1;
+import Algoritmos.Tests.MainTester;
 
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
@@ -8,16 +10,14 @@ public class MSrecursivoParalelo extends RecursiveAction {
 
     //Atributos constantes
     private final int[] arr, aux;
-    private static final int THRESHOLD = 8192;
+    public static int THRESHOLD = 1;
     //Atributos dinámicos
-    private final int length, right, left;
+    private final int right, left;
 
     public MSrecursivoParalelo(int[] arr, int[] aux, int left, int right){
-        ///Paso por referencia
+        ///Paso por referencia: constantes
         this.arr = arr;
         this.aux = aux;
-
-        this.length = 10;
 
         //Dinámicos
         this.left = left;
@@ -25,8 +25,10 @@ public class MSrecursivoParalelo extends RecursiveAction {
     }
     @Override
     protected void compute() {
+        int length = (right + 1 - left);
         if (length <= THRESHOLD) {
-            MSrecursivoSerial.sort(arr, aux, left, length-1);
+            MSrecursivoSerial.sort(arr, aux, left, right);
+            System.out.println("Serial sort executed. Th: "+THRESHOLD + "\t\tSize: "+ length);
         } else {
             int mid = left + (right - left) / 2;
 
@@ -61,7 +63,7 @@ public class MSrecursivoParalelo extends RecursiveAction {
 
         //Comparación entre el MSrecursivoParalelo con merge() unificado y sin unificar
 
-        int[] array = Algoritmos.Tests.MainTester.generateArray(1000);
+        int[] array = MainTester.generateArray(1000);
         System.out.println("Array original:");
         for (int num : array) {
             System.out.print(num + " ");
@@ -90,7 +92,7 @@ public class MSrecursivoParalelo extends RecursiveAction {
         System.out.print("\n\nTesting MSrecursivoParalelo non-unified");
 
         final ForkJoinPool forkJoinPool2 = new ForkJoinPool(Runtime.getRuntime().availableProcessors() -1);
-        Algoritmos.MergeSortRecursivoParalelo_V1 task2 = new Algoritmos.MergeSortRecursivoParalelo_V1(array2, array2.length);
+        MergeSortRecursivoParalelo_V1 task2 = new MergeSortRecursivoParalelo_V1(array2, array2.length);
 
         startTime = System.nanoTime();
         forkJoinPool2.invoke(task2);

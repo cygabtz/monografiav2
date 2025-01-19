@@ -28,7 +28,7 @@ public class MSrecursivoParalelo extends RecursiveAction {
         int length = (right + 1 - left);
         if (length <= THRESHOLD) {
             MSrecursivoSerial.sort(arr, aux, left, right);
-            System.out.println("Serial sort executed. Th: "+THRESHOLD + "\t\tSize: "+ length);
+            //System.out.println("Serial sort executed. Th: "+THRESHOLD + "\t\tSize: "+ length);
         } else {
             int mid = left + (right - left) / 2;
 

@@ -9,11 +9,10 @@ import java.util.concurrent.ForkJoinPool;
 
 public class FinalMainTester {
 
-    private static final int[] ARRAY_SIZES = generateSizes(100, 1_000_000, 20);
-    private static final int NUM_EXECUTIONS = 10;
+    private static final int[] ARRAY_SIZES = generateSizes(10, 1_000_000, 20);
+    private static final int NUM_EXECUTIONS = 50;
     private static final SplittableRandom RANDOM = new SplittableRandom();
     private static final String OUTPUT_FILE = "resultados_completos.csv";
-
     private static FileWriter promedios;
 
     public static void main(String[] args) throws IOException {

@@ -1,7 +1,7 @@
 package AlgoritmoFinal;
 
 public class MSrecursivoSerial {
-    //Retrieved from: https://www.baeldung.com/java-merge-sort
+    //Basado inicialment en: https://www.baeldung.com/java-merge-sort
     public static void sort(int[] arr, int[] aux, int left, int right) {
         //Caso base
         if (left >= right) return;
@@ -34,6 +34,8 @@ public class MSrecursivoSerial {
         // Los elementos restantes del subarreglo derecho ya están en su lugar
     }
 
+
+    //Método de pruba
     public static void main(String[] args) {
 
         //Comparación entre el MSrecursivoSerial con merge() unificado y sin unificar

@@ -9,20 +9,18 @@ import java.util.concurrent.Future;
 
 public class MSiterativoParalelo {
     private static final int THRESHOLD = 8192;
-    public static void sort(int[] array) {
-        int length = array.length;
-        int[] aux = new int[length];
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    public static void sort(int[] arr, int[] aux, ExecutorService executor) {
+        int length = arr.length;
 
         for (int size = 1; size < length; size *= 2) {
             if (size<= THRESHOLD){
-                MergeSortIterativoSerial.sort(array);
+                MergeSortIterativoSerial.sort(arr);
             } else {
                 for (int left = 0; left < length - size; left += 2 * size) {
                     int mid = left + size - 1;
                     int right = Math.min(left + 2 * size - 1, length - 1);
                     int finalLeft = left; //El resto son efectivamente finales
-                    Future <?> future = executor.submit(() -> merge(array, aux, finalLeft, mid, right));
+                    Future <?> future = executor.submit(() -> merge(arr, aux, finalLeft, mid, right));
                     try {
                         future.get(); // Esperar a que la tarea termine
                     } catch (Exception e) {
@@ -56,6 +54,7 @@ public class MSiterativoParalelo {
         //Comparación entre el MSinterativoParalelo con merge() unificado y sin unificar
 
         int[] array = Algoritmos.Tests.MainTester.generateArray(10000);
+        int[] aux = new int[array.length];
         System.out.println("Array original:");
         for (int num : array) {
             System.out.print(num + " ");
@@ -65,7 +64,7 @@ public class MSiterativoParalelo {
 
         System.out.print("\n\nTesting MSrecursivoParalelo unified");
         long startTime = System.nanoTime();
-        sort(array);
+        //sort(array, aux);
         long endTime = System.nanoTime();
 
         System.out.println("\n\nArray ordenado:");

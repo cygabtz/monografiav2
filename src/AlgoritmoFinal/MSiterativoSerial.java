@@ -1,16 +1,15 @@
 package AlgoritmoFinal;
 
 public class MSiterativoSerial {
-    public static void sort(int[] array) {
-        int length = array.length;
-        int[] aux = new int[length]; // Arreglo auxiliar para la mezcla
+    public static void sort(int[] arr, int[] aux) {
+        int length = arr.length;
 
         // Subarreglos de tamaño 1, 2, 4, 8, ... hasta n/2
         for (int size = 1; size < length; size *= 2) {
             for (int left = 0; left < length - size; left += 2 * size) {
                 int mid = left + size - 1;
                 int right = Math.min(left + 2 * size - 1, length - 1);
-                merge(array, aux, left, mid, right);
+                merge(arr, aux, left, mid, right);
             }
         }
     }

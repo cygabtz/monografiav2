@@ -5,19 +5,19 @@ import java.io.IOException;
 import java.util.SplittableRandom;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
 
 public class RealFinalMainTester {
 
     private static final int[] arraySizes = generateSizes();
-    private static final int numtrials = 20;
-    private static final SplittableRandom RANDOM = new SplittableRandom();
+    private static final int numtrials = 50;
     private static long[] averages, minValues, maxValues;
-    private static final String csvName = "testMSiterativoParalelo.csv";
-    private static final int parallismLevel = 10;
+    private static long[][] rawTrials;
+    private static final String csvName = "testDefinitivoMSiterativoSerial.csv";
+    private static final int parallelismLevel = 10;
 
     public static void main(String[] args) throws IOException {
         averages = new long[arraySizes.length];
+        rawTrials = new long[arraySizes.length][numtrials];
         minValues = new long[arraySizes.length];
         maxValues = new long[arraySizes.length];
 
@@ -34,15 +34,12 @@ public class RealFinalMainTester {
 
                 //Array auxiliar
                 int[] aux = new int[size];
-
-                ExecutorService executor = Executors.newFixedThreadPool(parallismLevel);
-
                 //Llamada al Garbage Collector
                 System.gc();
 
                 //Benchmark
                 long startTime = System.nanoTime();
-                MSiterativoParalelo.sort(arrayCopy, aux, executor);
+                MSiterativoSerial.sort(arrayCopy, aux);
                 long endTime = System.nanoTime();
 
                 long time = endTime - startTime;
@@ -50,13 +47,14 @@ public class RealFinalMainTester {
 
                 totalTime += time;
 
-                executor.shutdown();
+                rawTrials[i][trial] = time;
             }
 
             //Encontrar máximo y mínimo
             long max = Long.MIN_VALUE, min = Long.MAX_VALUE;
             for (long l : times) if (l > max) max = l;
             for (long p : times) if (p < min) min = p;
+
 
             //Calcular el promedio
             long average = (totalTime - min - max) / (numtrials - 2);
@@ -80,19 +78,31 @@ public class RealFinalMainTester {
                 writer.append(";").append(String.valueOf(minValues[i]));
                 writer.append(";").append(String.valueOf(maxValues[i]));
 
+                for (int j = 0; j<numtrials; j++){
+                    writer.append(";").append(String.valueOf(rawTrials[i][j]));
+                }
+
                 writer.append("\n");
             }
         }
     }
 
-    private static int[] generateArray(int size) {
-        return RANDOM.ints(size, 0, Integer.MAX_VALUE).toArray();
+    public static int[] generateArray(int size) {
+        int[] array = new int[size];
+        long seed = 6180339887L;
+        SplittableRandom random = new SplittableRandom(seed);
+
+        //Todos los arrays constan de una misma secuencia
+        for (int i = 0; i < array.length; i++) {
+            array[i] = random.nextInt(1000); //De 0 a 999
+        }
+        return array;
     }
 
     private static int[] generateSizes() {
         return new int[]
                 {10, 45, 100, 450, 1_000, 4_500, 10_000, 45_000, 100_000,
-                450_000, 1_000_000, 4_500_000, 10_000_000, 45_000_000, 100_000_000};
+                450_000, 1_000_000, 4_500_000, 10_000_000, 45_000_000};
     }
 
 }

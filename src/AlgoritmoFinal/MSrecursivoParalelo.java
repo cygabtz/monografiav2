@@ -10,7 +10,7 @@ public class MSrecursivoParalelo extends RecursiveAction {
 
     //Atributos constantes
     private final int[] arr, aux;
-    public static int THRESHOLD = 8192;
+    public static int THRESHOLD = 32768;
     //Atributos dinámicos
     private final int right, left;
 

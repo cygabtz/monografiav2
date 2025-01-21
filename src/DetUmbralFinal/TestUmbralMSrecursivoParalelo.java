@@ -1,47 +1,49 @@
-package DetUmbral;
-
-import AlgoritmoFinal.MSrecursivoParalelo;
+package DetUmbralFinal;
 
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.SplittableRandom;
 import java.util.concurrent.ForkJoinPool;
 
-public class TestPrueba{
+public class TestUmbralMSrecursivoParalelo {
     private static long[][] results;
-    private static final int MAX_SIZE = 1_000_000;
+    private static final int numTrials = 10;
+    private static final int maxSize = 10_000_000;
+    private static final String csvName = "testUmbralMSrecursivoParalelo.csv";
+    private static final int parallelismLevel = 10;
 
-    public static void main(String[] args) throws IOException{
-        results = new long[9][30];
-        for (int size=10, i=0; size<=MAX_SIZE; size*=10, i++){
+    public static void main(String[] args) throws IOException {
+        results = new long[10][30];
+        for (int size=10, i=0; size<=maxSize; size*=10, i++){
             int[] array = generateArray(size);
-            long[] times = new long[10];
+
+            long[] times = new long[numTrials];
             long totalTime = 0;
 
-            for (int threshold = 1, j=0; threshold<=Math.pow(2, 29); threshold*=2, j++){
+            for (int threshold = 2, j=0; threshold<=Math.pow(2, 29); threshold*=2, j++){
                 if (size < threshold){
                     results[i][j] = -1;
                     break;
                 } else {
-                    for (int trial = 0; trial<10; trial++){
-                        //Inicialización piscina y tarea
-                        final ForkJoinPool forkJoinPool =
-                                new ForkJoinPool(3);
-                        final MSrecursivoParalelo task =
-                                new MSrecursivoParalelo(array, new int[array.length], 0, array.length-1);
-                        MSrecursivoParalelo.THRESHOLD = threshold;
+                    for (int trial = 0; trial<numTrials; trial++){
+                        int[] arrayCopy = array.clone();
+                        int[] aux = new int[size];
+
+                        ForkJoinPool forkJoinPool = new ForkJoinPool(parallelismLevel);
+                        MSrecursivoParaleloCustomThresh task = new MSrecursivoParaleloCustomThresh(arrayCopy, aux, 0, size-1);
+                        task.setThresholdAt(threshold);
 
                         //Llamada al Garbage Collector
                         System.gc();
+
                         //Benchmark
                         long start = System.nanoTime();
                         forkJoinPool.invoke(task);
                         long end = System.nanoTime();
 
-                        long avg = end-start;
-                        times[trial] = avg;
-                        totalTime+=avg;
+                        long time = end - start;
+                        times[trial] = time;
+                        totalTime += time;
                     }
 
                     //Encontrar máximo y mínimo
@@ -50,18 +52,18 @@ public class TestPrueba{
                     for (long p : times) if (p < min) min = p;
 
                     //Calcular el promedio
-                    results[i][j] = (totalTime - min - max) / 8;
-                    System.out.println("Size: " + size + "\t\t\t\tThresh: "+threshold +
-                            "\t\t\t\tTime: "+ results[i][j]);
+                    results[i][j] = (totalTime - min - max) / (numTrials - 2);
+
+                    System.out.println("Size: " + size + "Th: " + threshold + "Time: " + results[i][j]);
                 }
             }
         }
         writeResults();
     }
     public static void writeResults() throws IOException{
-        try (FileWriter writer = new FileWriter("threshMSrecuParal.csv")) {
-            // Escribir encabezados writer.append("Threshold\\Size");
-            for (int size = 10; size <= MAX_SIZE; size *= 10) {
+        try (FileWriter writer = new FileWriter(csvName)) {
+            // Escribir encabezados
+            for (int size = 10; size <= maxSize; size *= 10) {
                 writer.append(",").append(String.valueOf(size));
             }
             writer.append("\n");

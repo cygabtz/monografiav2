@@ -1,16 +1,16 @@
-package AlgoritmoFinal;
+package DetUmbral;
 
+import AlgoritmoFinal.RealFinalMainTester;
 import Algoritmos.MergeSortIterativoSerial;
+import Algoritmos.Tests.MainTester;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 
-public class MSiterativoParalelo {
-    private static final int THRESHOLD = 8192;
+public class MSiterativoParaleloSinUmbral {
 
     public static void sort(int[] arr, int[] aux, ExecutorService executor) {
         int length = arr.length;
@@ -55,45 +55,14 @@ public class MSiterativoParalelo {
     }
 
     public static void main(String[] args) {
+        int [] arr = MainTester.generateArray(1000);
+        for (int i : arr) System.out.print(i+", ");
+        System.out.println("\n");
 
-        //Comparación entre el MSinterativoParalelo con merge() unificado y sin unificar
+        int [] aux = new int[arr.length];
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        sort(arr, aux, executorService);
 
-        int[] array = Algoritmos.Tests.MainTester.generateArray(10000);
-        int[] aux = new int[array.length];
-        System.out.println("Array original:");
-        for (int num : array) {
-            System.out.print(num + " ");
-        }
-        System.out.println();
-        int[] array2 = array.clone();
-
-        System.out.print("\n\nTesting MSrecursivoParalelo unified");
-        long startTime = System.nanoTime();
-        //sort(array, aux);
-        long endTime = System.nanoTime();
-
-        System.out.println("\n\nArray ordenado:");
-        for (int num : array) {
-            System.out.print(num + " ");
-        }
-
-        System.out.println();
-        System.out.println("Time taken: " + (endTime - startTime));
-
-
-        System.out.print("\n\nTesting MSrecursivoParalelo non-unified");
-
-        startTime = System.nanoTime();
-        Algoritmos.MergeSortIterativoParalelo_V1.sort(array2);
-        endTime = System.nanoTime();
-        System.out.println("\n\nArray ordenado:");
-        for (int num : array2) {
-            System.out.print(num + " ");
-        }
-
-        System.out.println();
-        System.out.println("Time taken: " + (endTime - startTime));
-
-        //La versión unificada parece ligeramente más lenta
+        for (int i : arr) System.out.print(i+", ");
     }
 }

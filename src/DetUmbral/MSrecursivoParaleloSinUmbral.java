@@ -1,4 +1,4 @@
-package AlgoritmoFinal;
+package DetUmbral;
 
 import Algoritmos.MergeSortRecursivoParalelo_V1;
 import Algoritmos.Tests.MainTester;
@@ -51,52 +51,5 @@ public class MSrecursivoParaleloSinUmbral extends RecursiveAction {
         while (i <= mid) arr[k++] = aux[i++];
 
         // Los elementos restantes del subarreglo derecho ya están en su lugar
-    }
-
-    public static void main(String[] args) {
-
-        //Comparación entre el MSrecursivoParalelo con merge() unificado y sin unificar
-
-        int[] array = MainTester.generateArray(1000);
-        System.out.println("Array original:");
-        for (int num : array) {
-            System.out.print(num + " ");
-        }
-        System.out.println();
-        int[] array2 = array.clone();
-
-        System.out.print("\n\nTesting MSrecursivoParalelo unified");
-
-        final ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors() - 1);
-        MSrecursivoParaleloSinUmbral task = new MSrecursivoParaleloSinUmbral(array, new int[array.length], 0, array.length - 1);
-
-        long startTime = System.nanoTime();
-        forkJoinPool.invoke(task);
-        long endTime = System.nanoTime();
-
-        System.out.println("\n\nArray ordenado:");
-        for (int num : array) {
-            System.out.print(num + " ");
-        }
-
-        System.out.println();
-        System.out.println("Time taken: " + (endTime - startTime));
-
-
-        System.out.print("\n\nTesting MSrecursivoParalelo non-unified");
-
-        final ForkJoinPool forkJoinPool2 = new ForkJoinPool(Runtime.getRuntime().availableProcessors() - 1);
-        MergeSortRecursivoParalelo_V1 task2 = new MergeSortRecursivoParalelo_V1(array2, array2.length);
-
-        startTime = System.nanoTime();
-        forkJoinPool2.invoke(task2);
-        endTime = System.nanoTime();
-        System.out.println("\n\nArray ordenado:");
-        for (int num : array2) {
-            System.out.print(num + " ");
-        }
-
-        System.out.println();
-        System.out.println("Time taken: " + (endTime - startTime));
     }
 }

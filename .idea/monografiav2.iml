@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="openjdk.jmh.core" level="project" />
+    <orderEntry type="library" name="jmh-generator-annprocess-1.37-sources" level="project" />
   </component>
 </module>
